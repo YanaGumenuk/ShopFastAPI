@@ -6,7 +6,18 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
+    SECRET_KEY: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
+    SMTP_HOST: str
+    SMTP_USER: str
+    SMTP_PASSWORD: str
+    SMTP_PORT: str
+    EMAILS_ENABLED: bool = False
+    EMAIL_TEMPLATES_DIR: str = "app/templates"
     PROJECT_NAME: str = "shop"
+    SMTP_TLS: bool = True
+    SERVER_HOST: str
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
