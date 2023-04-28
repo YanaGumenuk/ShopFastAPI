@@ -75,6 +75,19 @@ class UserCrud(BaseCrud):
             data=data
         )
 
+    async def password_change(
+            self,
+            user_id: int,
+            new_password: str
+    ) -> Union[UserInDB, bool]:
+        new_password_hash = get_password_hash(new_password)
+        data = {"hashed_password": new_password_hash}
+        return await self._update(
+            field=self.model.id,
+            value=user_id,
+            data=data
+        )
+
     async def is_active(
             self,
             user: UserInDB

@@ -57,3 +57,29 @@ async def send_new_account_email(
             "link": link,
         },
     )
+
+
+async def send_new_account_email(
+        email_to: str,
+        username: str,
+        token: str
+) -> None:
+    """Send email for new user account registration"""
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - New account for user {username}"
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
+        template_str = f.read()
+    server_host = settings.SERVER_HOST
+    link = f"{server_host}api/v1/register/{token}"
+    await send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "username": username,
+            "email": email_to,
+            "valid_hours": settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS,
+            "link": link,
+        },
+    )
