@@ -50,3 +50,13 @@ class UserInDB(UserBase, BaseInDB):
             "email": "test@gmail.com",
             "username": "Arsen",
         }
+
+
+class UserUpdateDTO(BaseModel):
+    username: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "username": "Paul",
+        }

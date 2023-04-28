@@ -1,11 +1,11 @@
-from typing import Union, Dict, Optional
+from typing import Union, Dict, Optional, List
 from datetime import timedelta
 from fastapi import HTTPException
 
 from app.core.settings import settings
 from app.services.databases.repositories.base import BaseCrud
 from app.services.databases.models.user.user import User
-from app.services.databases.schemas.user.user import UserCreateDTO, UserInDB
+from app.services.databases.schemas.user.user import UserCreateDTO, UserInDB, UserUpdateDTO
 from app.services.security.password_security import get_password_hash, verify_password
 
 from app.services.security.jwt import create_access_token
@@ -38,6 +38,36 @@ class UserCrud(BaseCrud):
         password = new_user_data.pop('password')
         new_user_data["hashed_password"] = get_password_hash(password)
         return await self._create(new_user_data)
+
+    async def update_user(
+            self,
+            user_id: int,
+            data: UserUpdateDTO
+    ) -> Union[UserUpdateDTO, bool]:
+        data = data.__dict__
+        return await self._update(
+            field=self.model.id,
+            value=user_id,
+            data=data
+        )
+
+    async def delete_user(
+            self,
+            user_id: int
+    ) -> bool:
+        return await self._delete(
+            field=self.model.id,
+            model_id=user_id)
+
+    async def get_list_user(
+            self,
+            offset: int = 0,
+            limit: int = 20
+    ) -> List[Optional[UserInDB]]:
+        return await self._get_list(
+            limit=limit,
+            offset=offset
+        )
 
     async def authenticate(
             self,

@@ -21,6 +21,7 @@ async def login_access_token(
         email=form_data.username,
         password=form_data.password)
 
+
 @router.get('/register/{token}')
 async def activate_user(
         token: str,
