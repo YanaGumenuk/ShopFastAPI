@@ -1,6 +1,5 @@
 from typing import Union, Dict, Optional, List
 from fastapi import APIRouter, Depends, HTTPException
-from app.services.databases.schemas.user.user import UserCreateDTO, UserInDB
 from app.services.databases.repositories.user.user import UserCrud
 from app.services.databases.schemas.user.user import (UserCreateDTO,
                                                       UserUpdateDTO,
