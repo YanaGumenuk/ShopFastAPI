@@ -26,6 +26,15 @@ class CategoryCrud(BaseCrud):
             offset=offset
         )
 
+    async def delete_category(
+            self,
+            category_id: int
+    ) -> bool:
+
+        return await self._delete(
+            field=self.model.id,
+            model_id=category_id)
+
 
     async def detail_category(
             self,
@@ -35,4 +44,16 @@ class CategoryCrud(BaseCrud):
         return await self._get(
             field=self.model.id,
             value=category_id,
+        )
+
+    async def update_category(
+            self,
+            category_id: int,
+            data: CategoryDTO
+    ) -> Union[CategoryInDB, bool]:
+        data = data.__dict__
+        return await self._update(
+            field=self.model.id,
+            value=category_id,
+            data=data
         )
