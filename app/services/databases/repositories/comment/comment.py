@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from app.services.databases.models.product.comment import Comment
 from app.services.databases.repositories.base import BaseCrud
@@ -17,3 +17,27 @@ class CommentCrud(BaseCrud):
         new_comment = data.__dict__
         new_comment["user_id"] = user_id
         return await self._create(data=new_comment)
+
+    async def get_user_comment(
+            self,
+            offset: int,
+            limit: int,
+            value: int
+
+    ) -> List[Optional[CommentInDB]]:
+        return await self._get_list(
+            offset=offset,
+            limit=limit,
+            field=self.model.user_id,
+            value=value
+        )
+
+    async def get_list_comment(
+            self,
+            offset: int = 0,
+            limit: int = 20
+    ) -> List[Optional[CommentInDB]]:
+        return await self._get_list(
+            offset=offset,
+            limit=limit,
+        )
