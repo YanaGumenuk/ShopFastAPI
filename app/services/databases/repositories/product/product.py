@@ -46,3 +46,21 @@ class ProductCrud(BaseCrud):
             value=product_id,
             data=data
         )
+
+        async def get_list(
+                self,
+                offset: int = 0,
+                limit: int = 20,
+                category_id: int = None
+        ) -> List[Optional[ProductInDB]]:
+            if category_id:
+                return await self._get_list(
+                    limit=limit,
+                    offset=offset,
+                    field=self.model.category_id,
+                    value=category_id
+                )
+            return await self._get_list(
+                limit=limit,
+                offset=offset
+            )

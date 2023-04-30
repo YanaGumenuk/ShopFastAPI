@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -57,3 +57,18 @@ async def update_product(
     if result:
         return result
     raise HTTPException(404, f'Category id {product_id} does not found ')
+
+
+@router.get('/list_product')
+async def get_list(
+        offset: int = 0,
+        limit: int = 20,
+        category_id: int = None,
+        crud: ProductCrud = Depends()
+) -> List[Optional[ProductInDB]]:
+    result = await crud.get_list(
+        offset=offset,
+        limit=limit,
+        category_id=category_id
+    )
+    return result
