@@ -25,3 +25,24 @@ class ProductCrud(BaseCrud):
             field=self.model.id,
             value=product_id
         )
+
+    async def delete_product(
+            self,
+            product_id: int
+    ) -> bool:
+
+        return await self._delete(
+            field=self.model.id,
+            model_id=product_id)
+
+    async def update_product(
+            self,
+            product_id: int,
+            data: ProductUpdateDTO
+    ) -> Optional[ProductInDB]:
+        data = data.__dict__
+        return await self._update(
+            field=self.model.id,
+            value=product_id,
+            data=data
+        )
