@@ -1,5 +1,6 @@
 from typing import TypeVar, Type, ClassVar, Any, Optional, List
 from fastapi import Depends
+from sqlalchemy.orm import selectinload
 
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from sqlalchemy.exc import IntegrityError
@@ -136,3 +137,18 @@ class BaseCrud:
             return None
         except IntegrityError:
             return None
+
+    async def _get_relation_detail_one(
+            self,
+            relation_field: Any,
+            filter_field: Any,
+            filter_value: Any
+    ) -> Optional[List[Model]]:
+        stmt = (
+            select(self.model)
+            .options(selectinload(relation_field))
+            .filter(filter_field == filter_value)
+        )
+        result = await self._session.scalar(stmt)
+        return result
+
