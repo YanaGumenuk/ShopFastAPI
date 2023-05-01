@@ -46,3 +46,18 @@ class Cart:
             return {'message': 'successfully'}
         return None
 
+    def get_cart(
+            self
+    ) -> Dict[str, Union[int, Dict[str, Dict[str, Union[str, int]]]]]:
+        quantity = len(self.cart)
+        return {'quantity': quantity, "cart": self.cart}
+
+    def clear(
+            self,
+            request: Request
+    ) -> None:
+        del request.session['cart']
+
+    def get_total_price(self) -> int:
+        return sum(Decimal(item['price'])*item['quantity']
+                   for item in self.cart.values())

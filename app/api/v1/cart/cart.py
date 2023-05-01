@@ -30,3 +30,24 @@ async def cart_add(
             status_code=404, detail=f"There isn't entry with id={product_id}"
         )
 
+
+@router.delete('/delete')
+async def cart_delete(
+        product_id: str,
+        request: Request
+) -> Optional[Dict[str, str]]:
+    cart = Cart(request)
+    result = cart.remove(request=request,
+                         product_id=product_id)
+    if result:
+        return result
+    raise HTTPException(404, 'Product not in cart')
+
+
+@router.get('/get')
+async def cart_get(
+        request: Request
+) -> Dict[str, Union[int, Dict[str, Dict[str, Union[str, int]]]]]:
+    cart = Cart(request)
+    result = cart.get_cart()
+    return result
