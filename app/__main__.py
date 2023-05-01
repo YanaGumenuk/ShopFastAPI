@@ -2,9 +2,10 @@ from fastapi import FastAPI
 
 from app.api.v1 import api_router
 from app.gunicorn_app import StandaloneApplication
+from app.middleware.middleware import middleware
 
 
-app = FastAPI()
+app = FastAPI(middleware=middleware)
 
 
 app.include_router(api_router.router,
