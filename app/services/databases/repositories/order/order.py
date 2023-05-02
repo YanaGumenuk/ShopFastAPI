@@ -26,3 +26,29 @@ class OrderCrud(BaseCrud):
             filter_value=order_id
         )
 
+    async def list_order(
+            self,
+            offset: int = 0,
+            limit: int = 20
+    ) -> List[Optional[OrderInDB]]:
+        return await self._get_relation_list(
+            offset=offset,
+            limit=limit,
+            relation_field=self.model.items
+        )
+
+    async def get_user_order(
+            self,
+            value: str,
+            offset: int,
+            limit: int
+    ) -> List[Optional[OrderInDB]]:
+        return await self._get_relation_list(
+            offset=offset,
+            limit=limit,
+            filter_field=self.model.email,
+            filter_value=value,
+            relation_field=self.model.items
+        )
+
+

@@ -152,3 +152,28 @@ class BaseCrud:
         result = await self._session.scalar(stmt)
         return result
 
+    async def _get_relation_list(
+            self,
+            limit: int,
+            offset: int,
+            relation_field: Any,
+            filter_field: Any = None,
+            filter_value: Any = None,
+    ) -> Optional[List[Model]]:
+        if not (filter_field and filter_value):
+            stmt = (
+                select(self.model)
+                .options(selectinload(relation_field))
+                .offset(offset)
+                .limit(limit)
+            )
+        else:
+            stmt = (
+                select(self.model)
+                .options(selectinload(relation_field))
+                .filter(filter_field == filter_value)
+                .offset(offset)
+                .limit(limit)
+            )
+        result = await self._session.scalars(stmt)
+        return result.all()

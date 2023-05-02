@@ -7,7 +7,7 @@ from app.services.cart.cart import Cart
 from app.services.databases.repositories.order.item import ItemCrud
 from app.services.databases.repositories.order.order import OrderCrud
 from app.services.databases.schemas.order.order import OrderDTO, OrderInDB
-from app.services.security.permissions import get_current_active_superuser
+from app.services.security.permissions import get_current_active_superuser, get_current_active_user
 
 
 router = APIRouter()
@@ -52,3 +52,29 @@ async def get_order(
         return order
     raise HTTPException(404, 'order does not exist')
 
+
+@router.get('/list', dependencies=[Depends(get_current_active_superuser)])
+async def get_list_order(
+        offset: int = 0,
+        limit: int = 10,
+        order_crud: OrderCrud = Depends()
+) -> List[Optional[OrderInDB]]:
+    result = await order_crud.list_order(
+        offset=offset,
+        limit=limit)
+    return result
+
+
+@router.get('/user_order', dependencies=[Depends(get_current_active_superuser)])
+async def get_user_order(
+        email: str,
+        offset: int = 0,
+        limit: int = 10,
+        order_crud: OrderCrud = Depends()
+) -> List[Optional[OrderInDB]]:
+    result = await order_crud.get_user_order(
+        value=email,
+        offset=offset,
+        limit=limit
+    )
+    return result
